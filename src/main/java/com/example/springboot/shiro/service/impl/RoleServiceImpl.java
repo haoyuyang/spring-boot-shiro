@@ -5,10 +5,12 @@ import com.example.springboot.shiro.entity.Role;
 import com.example.springboot.shiro.entity.RoleAuthority;
 import com.example.springboot.shiro.entity.User;
 import com.example.springboot.shiro.mapper.AuthorityMapper;
+import com.example.springboot.shiro.mapper.RoleAuthorityMapper;
 import com.example.springboot.shiro.mapper.RoleMapper;
 import com.example.springboot.shiro.service.RoleService;
 import com.example.springboot.shiro.service.ShiroService;
 import com.example.springboot.shiro.vo.PageResponse;
+import com.example.springboot.shiro.vo.req.AddOrUpdateRoleReqVO;
 import com.example.springboot.shiro.vo.req.QueryRolesReqVO;
 import com.example.springboot.shiro.vo.req.UpdateRoleReqVO;
 import com.github.pagehelper.Page;
@@ -31,6 +33,9 @@ public class RoleServiceImpl implements RoleService {
     private AuthorityMapper authorityMapper;
     @Autowired
     private ShiroService shiroService;
+    @Autowired
+    private RoleAuthorityMapper roleAuthorityMapper;
+
     @Autowired
     private ShiroFilterFactoryBean shiroFilterFactoryBean;
 
@@ -105,6 +110,24 @@ public class RoleServiceImpl implements RoleService {
             role.setAuthorities(authorities);
         }
         return new PageResponse<>(page.getTotal(), roles);
+    }
+
+    @Override
+    public void addRole(AddOrUpdateRoleReqVO vo) {
+        Role role = new Role();
+        role.setRoleName(vo.getRoleName());
+        role.setStatus((short) 1);
+        roleMapper.insertSelective(role);
+
+        List<RoleAuthority> roleAuthorities = new ArrayList<>();
+        RoleAuthority roleAuthority;
+        for (Long authorityId : vo.getAuthorityIds()) {
+            roleAuthority = new RoleAuthority();
+            roleAuthority.setAuthorityId(authorityId);
+            roleAuthority.setRoleId(role.getId());
+            roleAuthorities.add(roleAuthority);
+        }
+        roleAuthorityMapper.insertList(roleAuthorities);
     }
 
     private void addAuthorities(List<Long> authorityIds, Role role) {

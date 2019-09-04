@@ -7,13 +7,31 @@ package com.example.springboot.shiro.vo.req;
  * @since 1.0.0
  */
 public class QueryUserListReqVO extends PageReqVO {
-    private String username;
+    private Short keywordType;
+    private String keyword;
+    private Short status;
 
-    public String getUsername() {
-        return username;
+    public Short getKeywordType() {
+        return keywordType;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setKeywordType(Short keywordType) {
+        this.keywordType = keywordType;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public Short getStatus() {
+        return status;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
     }
 }

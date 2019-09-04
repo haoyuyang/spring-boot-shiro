@@ -3,11 +3,13 @@ package com.example.springboot.shiro.mapper;
 import com.example.springboot.shiro.entity.Authority;
 import com.example.springboot.shiro.entity.RoleAuthority;
 import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.MySqlMapper;
 
 import java.util.List;
 
 @Repository
-public interface AuthorityMapper {
+public interface AuthorityMapper extends Mapper<Authority>, MySqlMapper<Authority> {
     List<Authority> findAuthorities();
 
     List<Authority> findAuthoritiesByRoleId(Long roleId);
@@ -19,4 +21,6 @@ public interface AuthorityMapper {
     void updatePermissions(List<Authority> authorities);
 
     List<Authority> findAllAuthoritiesByRoleId(Long id);
+
+    List<Authority> getAuthoritiesWithParent();
 }

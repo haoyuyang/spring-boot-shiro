@@ -27,7 +27,7 @@ public class UserController {
         return new BaseResponse<>(userService.list());
     }
 
-    @PostMapping("/findUsersByCondition")
+    @PostMapping("/page")
     public PageResponse<List<User>> findUsersByCondition(@RequestBody QueryUserListReqVO vo) {
         return userService.findUsersByCondition(vo);
     }

@@ -11,6 +11,9 @@ public class User implements Serializable, AuthCachePrincipal {
     private String password;
     private String mobile;
     private Long roleId;
+    private String contacts;
+    private String email;
+    private Short status;
 
     public Long getId() {
         return id;
@@ -58,6 +61,30 @@ public class User implements Serializable, AuthCachePrincipal {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Short getStatus() {
+        return status;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
     }
 
     @Override

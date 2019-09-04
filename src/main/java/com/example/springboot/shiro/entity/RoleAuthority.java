@@ -1,5 +1,8 @@
 package com.example.springboot.shiro.entity;
 
+import javax.persistence.Table;
+
+@Table(name = "t_role_authority")
 public class RoleAuthority {
     private Long roleId;
     private Long authorityId;

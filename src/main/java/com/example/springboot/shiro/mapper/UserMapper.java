@@ -1,6 +1,7 @@
 package com.example.springboot.shiro.mapper;
 
 import com.example.springboot.shiro.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
@@ -15,5 +16,5 @@ public interface UserMapper extends Mapper<User>, MySqlMapper<User> {
 
     List<User> findUsersByRoleId(Long roleId);
 
-    List<User> findUsersByCondition(String username);
+    List<User> findUsersByCondition(@Param("keywordType") Short keywordType, @Param("keyword") String keyword, @Param("status") Short status);
 }

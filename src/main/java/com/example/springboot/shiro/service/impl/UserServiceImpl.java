@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResponse<List<User>> findUsersByCondition(QueryUserListReqVO vo) {
         Page<User> page = PageHelper.startPage((vo.getPageNum() - 1) * vo.getPageSize(), vo.getPageSize());
-        List<User> userListPage = userMapper.findUsersByCondition(vo.getUsername());
+        List<User> userListPage = userMapper.findUsersByCondition(vo.getKeywordType(), vo.getKeyword(), vo.getStatus());
         return new PageResponse<>(page.getTotal(), userListPage);
     }
 

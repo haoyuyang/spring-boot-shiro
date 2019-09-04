@@ -17,6 +17,7 @@
         <result column="uri" property="uri" jdbcType="VARCHAR" />
         <result column="permission" property="permission" jdbcType="VARCHAR" />
         <collection property="authorities" ofType="com.example.springboot.shiro.entity.Authority">
+            <result column="id1" property="id" jdbcType="BIGINT" />
             <result column="authority_name1" property="authorityName" jdbcType="VARCHAR" />
             <result column="icon1" property="icon" jdbcType="VARCHAR" />
             <result column="uri1" property="uri" jdbcType="VARCHAR" />
@@ -80,5 +81,14 @@
         INNER JOIN t_authority t2 on t1.authority_id = t2.id AND t2.p_id is null
         LEFT JOIN t_authority t3 ON t2.id = t3.p_id
         WHERE t1.role_id = #{roleId}
+    </select>
+    <select id="getAuthoritiesWithParent" resultMap="RelationshipResultMap">
+        SELECT
+            t1.id, t1.authority_name, t1.icon, t1.uri,
+            t2.id AS id1, t2.authority_name AS authority_name1, t2.icon AS icon1, t2.uri AS uri1
+        FROM
+            t_authority t1
+        LEFT JOIN t_authority t2 on t1.id = t2.p_id
+        WHERE t1.p_id IS NULL ORDER BY t1.id
     </select>
 </mapper>

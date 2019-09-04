@@ -1,8 +1,8 @@
 package com.example.springboot.shiro;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication(scanBasePackages = "com.example.springboot.shiro")
 @MapperScan("com.example.springboot.shiro.mapper")

@@ -11,5 +11,5 @@ import java.util.List;
  * @since
  */
 public interface AuthorityService {
-    List<Authority> getAuthorities();
+    List<Authority> getAuthoritiesWithParent();
 }

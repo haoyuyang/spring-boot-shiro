@@ -25,6 +25,6 @@ public class AuthorityController {
 
     @PostMapping("/list")
     public BaseResponse<List<Authority>> getAuthorities() {
-        return new BaseResponse<>(authorityService.getAuthorities());
+        return new BaseResponse<>(authorityService.getAuthoritiesWithParent());
     }
 }

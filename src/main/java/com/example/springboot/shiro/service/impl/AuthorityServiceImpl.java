@@ -21,7 +21,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AuthorityMapper authorityMapper;
 
     @Override
-    public List<Authority> getAuthorities() {
-        return authorityMapper.findAuthorities();
+    public List<Authority> getAuthoritiesWithParent() {
+        return authorityMapper.getAuthoritiesWithParent();
     }
 }

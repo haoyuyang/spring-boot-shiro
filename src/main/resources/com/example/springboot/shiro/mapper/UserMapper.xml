@@ -5,18 +5,21 @@
   <resultMap id="BaseResultMap" type="com.example.springboot.shiro.entity.User">
       <id column="id" property="id" jdbcType="INTEGER" />
       <result column="username" property="username" jdbcType="VARCHAR" />
+      <result column="contacts" property="contacts" jdbcType="VARCHAR" />
       <result column="gender" property="gender" jdbcType="INTEGER" />
       <result column="password" property="password" jdbcType="VARCHAR" />
-      <result column="role_id" property="roleId" jdbcType="INTEGER" />
+      <result column="email" property="email" jdbcType="VARCHAR" />
       <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+      <result column="role_id" property="roleId" jdbcType="INTEGER" />
+      <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
 
   <sql id="NonIncludePasswordFields">
-    id, username, gender, mobile, role_id
+    id, username, gender, contacts, mobile, email, role_id, status
   </sql>
 
     <sql id="AllFields">
-    id, username, password, gender, mobile, role_id
+    id, username, password, gender, contacts, mobile, email, role_id, status
   </sql>
 
   <select id="findUserByUserName" parameterType="String" resultMap="BaseResultMap">
@@ -45,6 +48,25 @@
             <include refid="NonIncludePasswordFields" />
         FROM
             t_user
-        WHERE username LIKE CONCAT('%', #{username}, '%')
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="keywordType != null and keyword != null and keyword != ''">
+                <if test="keywordType == 1">
+                    username
+                </if>
+                <if test="keywordType == 2">
+                    contacts
+                </if>
+                <if test="keywordType == 3">
+                    mobile
+                </if>
+                <if test="keywordType == 4">
+                    email
+                </if>
+                LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </trim>
     </select>
 </mapper>
