@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot.shiro.mapper.RoleMapper" >
+
+    <resultMap id="BaseResultMap" type="com.example.springboot.shiro.entity.Role">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+    <update id="updateById" parameterType="com.example.springboot.shiro.entity.Role">
+        UPDATE t_role SET role_name = #{roleName} WHERE id = #{id}
+    </update>
+    <delete id="deleteRoleAuthorities" parameterType="Integer">
+        DELETE FROM t_role_authority WHERE role_id = #{roleId}
+    </delete>
+
+    <select id="findRoleById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+          id, role_name, status
+        FROM
+          t_role
+        WHERE id = #{roleId}
+    </select>
+    <select id="findAllRoles" resultMap="BaseResultMap">
+        SELECT
+          id, role_name, status
+        FROM
+          t_role
+        <trim prefix="where" prefixOverrides="AND">
+            <if test="status != null">
+                status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND keywords LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </trim>
+    </select>
+    <select id="findRoleByIdWithStatus" resultMap="BaseResultMap">
+        SELECT
+          id, role_name, status
+        FROM
+          t_role
+        WHERE id = #{roleId} AND status = #{status}
+    </select>
+</mapper>

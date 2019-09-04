@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot.shiro.mapper.AuthorityMapper" >
+
+    <resultMap id="BaseResultMap" type="com.example.springboot.shiro.entity.Authority">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="authority_name" property="authorityName" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="uri" property="uri" jdbcType="VARCHAR" />
+        <result column="permission" property="permission" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="RelationshipResultMap" type="com.example.springboot.shiro.entity.Authority">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="authority_name" property="authorityName" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="uri" property="uri" jdbcType="VARCHAR" />
+        <result column="permission" property="permission" jdbcType="VARCHAR" />
+        <collection property="authorities" ofType="com.example.springboot.shiro.entity.Authority">
+            <result column="authority_name1" property="authorityName" jdbcType="VARCHAR" />
+            <result column="icon1" property="icon" jdbcType="VARCHAR" />
+            <result column="uri1" property="uri" jdbcType="VARCHAR" />
+            <result column="permission1" property="permission" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <sql id="AllFields">
+        id, authority_name, icon, uri, permission
+    </sql>
+    <insert id="insertAuthorities" parameterType="List">
+        INSERT INTO
+          t_role_authority(role_id, authority_id)
+        VALUES
+          <foreach collection="list" separator="," item="item">
+              (#{item.roleId}, #{item.authorityId})
+          </foreach>
+    </insert>
+    <update id="updatePermissions" parameterType="com.example.springboot.shiro.entity.Authority">
+        <foreach collection="list" separator=";" item="item">
+            UPDATE
+              t_authority
+            SET
+              permission = #{item.permission}
+            WHERE
+              id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="findAuthorities" resultMap="BaseResultMap">
+        SELECT
+          <include refid="AllFields" />
+        FROM
+          t_authority
+        WHERE p_id IS NOT NULL
+    </select>
+    <select id="findAuthoritiesByRoleId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+          <include refid="AllFields" />
+        FROM
+          t_role_authority t1
+        INNER JOIN t_authority t2 on t1.authority_id = t2.id
+        WHERE t1.role_id = #{roleId}
+    </select>
+    <select id="findAuthoritiesByIds" parameterType="List" resultType="com.example.springboot.shiro.entity.Authority">
+        SELECT
+          <include refid="AllFields" />
+        FROM
+          t_authority
+        WHERE
+          id IN
+        <foreach collection="list" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="findAllAuthoritiesByRoleId" resultMap="RelationshipResultMap">
+        SELECT
+            t2.*, t3.authority_name AS authority_name1
+        FROM
+            t_role_authority t1
+        INNER JOIN t_authority t2 on t1.authority_id = t2.id AND t2.p_id is null
+        LEFT JOIN t_authority t3 ON t2.id = t3.p_id
+        WHERE t1.role_id = #{roleId}
+    </select>
+</mapper>

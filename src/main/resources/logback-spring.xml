@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property resource="application.properties"/>
+    <property name="projectName" value="${spring.application.name}"/>
+    <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%t %d %p (%file:%line\)- %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="default">
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <appender name="EXAMPLE_DEV_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}-default.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-dev-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="EXAMPLE_DEV_DEBUG"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="dev">
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <appender name="EXAMPLE_DEV_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}-dev.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-dev-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="EXAMPLE_DEV_DEBUG"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="test">
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <appender name="EXAMPLE_DEV_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}-test.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-test-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="EXAMPLE_DEV_DEBUG"/>
+        </logger>
+    </springProfile>
+    <springProfile name="prelauch">
+        <appender name="EXAMPLE_TEST_DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}-prelauch.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-test-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.example" level="debug" additivity="false">
+            <appender-ref ref="EXAMPLE_TEST_DEBUG"/>
+        </logger>
+    </springProfile>
+
+    <!--<springProfile name="pro">
+        <appender name="EXAMPLE_API" class="ch.qos.logback.core.ConsoleAppender">
+            &lt;!&ndash;<file>/data/log/${projectName}/${projectName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>&ndash;&gt;
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern>%t %d %p (%file:%line\)- %m%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.example" level="info" additivity="false">
+            <appender-ref ref="EXAMPLE_API"/>
+        </logger>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="EXAMPLE_API"/>
+        </logger>
+    </springProfile>-->
+
+
+    <springProfile name="prelaunch">
+        <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>172.16.248.161:9000</destination>
+            <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <appender name="EXAMPLE_API" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}&#45;&#45;prelaunch-%d{yyyy-MM-dd}.log
+                </fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.example" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="beiguo">
+        <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>172.16.201.169:8888</destination>
+            <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <appender name="EXAMPLE_API" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.example" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="pro">
+        <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>172.16.201.169:8888</destination>
+            <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <appender name="EXAMPLE_API" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.example" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="ali">
+        <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>172.16.201.169:8888</destination>
+            <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <appender name="EXAMPLE_API" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/log/${projectName}/${projectName}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/log/${projectName}/${projectName}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.example" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.springframework" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+    </springProfile>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
