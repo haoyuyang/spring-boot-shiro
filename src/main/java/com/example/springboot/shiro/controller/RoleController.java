@@ -4,10 +4,7 @@ import com.example.springboot.shiro.entity.Role;
 import com.example.springboot.shiro.service.RoleService;
 import com.example.springboot.shiro.vo.BaseResponse;
 import com.example.springboot.shiro.vo.PageResponse;
-import com.example.springboot.shiro.vo.req.AddOrUpdateRoleReqVO;
-import com.example.springboot.shiro.vo.req.PageReqVO;
-import com.example.springboot.shiro.vo.req.QueryRolesReqVO;
-import com.example.springboot.shiro.vo.req.UpdateRoleReqVO;
+import com.example.springboot.shiro.vo.req.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +23,7 @@ public class RoleController {
 
     @PostMapping("/update")
     public BaseResponse update(@RequestBody UpdateRoleReqVO vo) {
-        return new BaseResponse<>(roleService.update(vo));
+        return roleService.update(vo);
     }
 
     @PostMapping("/page")
@@ -40,4 +37,18 @@ public class RoleController {
         return new BaseResponse();
     }
 
+    @PostMapping("/updateStatus")
+    public BaseResponse updateStatus(@RequestBody UpdateStatusReqVO vo) {
+        return roleService.updateStatus(vo);
+    }
+
+    @PostMapping("/delete")
+    public BaseResponse delete(@RequestBody IdReqVO vo) {
+        return roleService.delete(vo.getId());
+    }
+
+    @PostMapping("/detail")
+    public BaseResponse<Role> detail(@RequestBody IdReqVO vo) {
+        return new BaseResponse<>(roleService.detail(vo.getId()));
+    }
 }

@@ -61,7 +61,7 @@ public class ShiroServiceImpl implements ShiroService {
      * @param shiroFilterFactoryBean
      */
     @Override
-    public void updatePermission(ShiroFilterFactoryBean shiroFilterFactoryBean, Long roleId) {
+    public void updatePermission(ShiroFilterFactoryBean shiroFilterFactoryBean, Long roleId, Boolean isRemoveSession) {
         synchronized (this) {
             AbstractShiroFilter shiroFilter;
             try {
@@ -85,11 +85,10 @@ public class ShiroServiceImpl implements ShiroService {
 
             List<User> users = userMapper.findUsersByRoleId(roleId);
 
-            if (users.size() == 0) {
-                return;
-            }
-            for (User user : users) {
-                ShiroUtil.kickOutUser(user.getUsername(), false);
+            if (users.size() > 0) {
+                for (User user : users) {
+                    ShiroUtil.kickOutUser(user.getUsername(), isRemoveSession);
+                }
             }
         }
     }

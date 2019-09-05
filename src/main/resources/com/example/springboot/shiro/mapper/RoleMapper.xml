@@ -10,7 +10,10 @@
     <update id="updateById" parameterType="com.example.springboot.shiro.entity.Role">
         UPDATE t_role SET role_name = #{roleName} WHERE id = #{id}
     </update>
-    <delete id="deleteRoleAuthorities" parameterType="Integer">
+    <update id="updateStatus">
+        UPDATE t_role SET status = #{status} WHERE id = #{id}
+    </update>
+    <delete id="deleteRoleAuthorities" parameterType="Long">
         DELETE FROM t_role_authority WHERE role_id = #{roleId}
     </delete>
 
@@ -41,5 +44,8 @@
         FROM
           t_role
         WHERE id = #{roleId} AND status = #{status}
+    </select>
+    <select id="countRoleUser" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_user WHERE role_id = #{id}
     </select>
 </mapper>

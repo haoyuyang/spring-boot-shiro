@@ -1,5 +1,6 @@
 package com.example.springboot.shiro.mapper;
 
+import com.example.springboot.shiro.entity.Authority;
 import com.example.springboot.shiro.entity.Role;
 import com.example.springboot.shiro.entity.User;
 import org.apache.ibatis.annotations.Param;
@@ -21,5 +22,7 @@ public interface RoleMapper extends Mapper<Role>, MySqlMapper<Role> {
 
     Role findRoleByIdWithStatus(@Param("roleId") Long roleId, @Param("status") Short status);
 
-    void save(Role role);
+    void updateStatus(@Param("id") Long id, @Param("status") Short status);
+
+    Integer countRoleUser(Long id);
 }

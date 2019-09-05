@@ -73,14 +73,18 @@
             #{item}
         </foreach>
     </select>
-    <select id="findAllAuthoritiesByRoleId" resultMap="RelationshipResultMap">
+    <select id="findAllAuthoritiesByRoleId" parameterType="Long" resultMap="RelationshipResultMap">
         SELECT
-            t2.*, t3.authority_name AS authority_name1
+            t1.id,
+            t1.authority_name,
+            t2.id AS id1,
+            t2.authority_name AS authority_name1
         FROM
-            t_role_authority t1
-        INNER JOIN t_authority t2 on t1.authority_id = t2.id AND t2.p_id is null
-        LEFT JOIN t_authority t3 ON t2.id = t3.p_id
-        WHERE t1.role_id = #{roleId}
+            t_authority t1
+        INNER JOIN t_authority t2 ON t1.id = t2.p_id
+        WHERE
+            t2.id IN ( SELECT authority_id FROM t_role_authority WHERE role_id = #{roleId} )
+
     </select>
     <select id="getAuthoritiesWithParent" resultMap="RelationshipResultMap">
         SELECT

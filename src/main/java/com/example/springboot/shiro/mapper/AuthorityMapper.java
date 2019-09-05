@@ -2,6 +2,7 @@ package com.example.springboot.shiro.mapper;
 
 import com.example.springboot.shiro.entity.Authority;
 import com.example.springboot.shiro.entity.RoleAuthority;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

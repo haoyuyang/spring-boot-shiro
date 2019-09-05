@@ -3,14 +3,14 @@
 <mapper namespace="com.example.springboot.shiro.mapper.UserMapper" >
 
   <resultMap id="BaseResultMap" type="com.example.springboot.shiro.entity.User">
-      <id column="id" property="id" jdbcType="INTEGER" />
+      <id column="id" property="id" jdbcType="BIGINT" />
       <result column="username" property="username" jdbcType="VARCHAR" />
       <result column="contacts" property="contacts" jdbcType="VARCHAR" />
-      <result column="gender" property="gender" jdbcType="INTEGER" />
+      <result column="gender" property="gender" jdbcType="TINYINT" />
       <result column="password" property="password" jdbcType="VARCHAR" />
       <result column="email" property="email" jdbcType="VARCHAR" />
       <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-      <result column="role_id" property="roleId" jdbcType="INTEGER" />
+      <result column="role_id" property="roleId" jdbcType="BIGINT" />
       <result column="status" property="status" jdbcType="TINYINT" />
   </resultMap>
 
@@ -35,7 +35,7 @@
       FROM
         t_user
   </select>
-    <select id="findUsersByRoleId" parameterType="Integer" resultMap="BaseResultMap">
+    <select id="findUsersByRoleId" parameterType="Long" resultMap="BaseResultMap">
         SELECT
           <include refid="NonIncludePasswordFields" />
         FROM
