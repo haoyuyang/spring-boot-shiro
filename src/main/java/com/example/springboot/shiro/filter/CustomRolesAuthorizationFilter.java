@@ -52,7 +52,7 @@ public class CustomRolesAuthorizationFilter extends RolesAuthorizationFilter {
         servletResponse.setHeader("Vary", "Origin");
         String respStr;
         if (subject.getPrincipal() == null) {
-            respStr = JSONObject.toJSONString(new BaseResponse<>(300, "您还未登录，请先登录"));
+            respStr = JSONObject.toJSONString(new BaseResponse<>(207, "您还未登录，请先登录"));
         } else {
             respStr = JSONObject.toJSONString(new BaseResponse<>(403, "您没有此权限，请联系管理员"));
         }

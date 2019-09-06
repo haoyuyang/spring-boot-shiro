@@ -48,10 +48,8 @@ public class JwtUtil {
         Claims claims;
         try {
             claims = parseJWT(jwtStr);
-        } catch (ExpiredJwtException e) {
-            throw new BusinessException(207, "Token已过期");
         } catch (Exception e) {
-            throw new RuntimeException("您还未登录，请先登录");
+            throw new BusinessException(207, "Token已过期");
         }
         return claims;
     }
