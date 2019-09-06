@@ -52,6 +52,14 @@ public class RoleServiceImpl implements RoleService {
     public BaseResponse update(UpdateRoleReqVO vo) {
         Long roleId = vo.getId();
         Role dbRole = roleMapper.findRoleById(roleId);
+
+        if (dbRole == null) {
+            return new BaseResponse<>(101, "角色不存在");
+        }
+        if ("admin".equalsIgnoreCase(dbRole.getRoleName())) {
+            return new BaseResponse<>(102, "admin角色不允许操作");
+        }
+
         Role role = new Role();
         BeanUtils.copyProperties(vo, role);
         roleMapper.updateById(role);
