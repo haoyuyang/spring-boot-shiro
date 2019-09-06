@@ -104,6 +104,9 @@ public class UserServiceImpl implements UserService {
         if (dbUser == null) {
             return new BaseResponse(202, "用户不存在");
         }
+        if ("admin".equalsIgnoreCase(dbUser.getUsername())) {
+            return new BaseResponse<>(203, "admin用户不允许操作");
+        }
         userMapper.deleteByPrimaryKey(id);
         // 将用户踢出
         ShiroUtil.kickOutUser(dbUser.getUsername(), true);
@@ -143,6 +146,10 @@ public class UserServiceImpl implements UserService {
         User dbUser = userMapper.selectByPrimaryKey(vo.getId());
         if (dbUser == null) {
             return new BaseResponse<>(202, "用户不存在");
+        }
+
+        if ("admin".equalsIgnoreCase(dbUser.getUsername())) {
+            return new BaseResponse(203, "admin用户不允许操作");
         }
 
         //更新用户信息
