@@ -6,6 +6,7 @@ import com.example.springboot.shiro.entity.User;
 import com.example.springboot.shiro.mapper.AuthorityMapper;
 import com.example.springboot.shiro.mapper.RoleMapper;
 import com.example.springboot.shiro.mapper.UserMapper;
+import com.example.springboot.shiro.util.ShiroUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -63,37 +64,21 @@ public class PasswordRealm extends AuthorizingRealm {
         //根据用户名查询密码，由安全管理器负责对比查询出的数据库中的密码和页面输入的密码是否一致
         User user = userMapper.findUserByUserName(username);
         if (user == null) {
-            return null;
+            throw new AuthenticationException("用户不存在");
         }
 
         // 查询角色
         Role role = roleMapper.findRoleByIdWithStatus(user.getRoleId(), (short) 1);
         if (role == null) {
-            return null;
-        }
-
-        //单用户登录
-        //处理session
-        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
-        DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager();
-        //获取当前已登录的用户session列表
-        Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();
-        User temp;
-        for(Session session : sessions){
-            //清除该用户以前登录时保存的session，强制退出
-            Object attribute = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-            if (attribute == null) {
-                continue;
-            }
-
-            temp = (User) ((SimplePrincipalCollection) attribute).getPrimaryPrincipal();
-            if(username.equals(temp.getUsername())) {
-                sessionManager.getSessionDAO().delete(session);
-            }
+            throw new AuthenticationException("该用户暂无角色或角色不可用");
         }
 
         String password = user.getPassword();
+        //单用户登录
+        ShiroUtil.kickOutUser(username, true);
+
         //最后的比对需要交给安全管理器,三个参数进行初步的简单认证信息对象的包装,由安全管理器进行包装运行
         return new SimpleAuthenticationInfo(user, password, getName());
     }
+
 }

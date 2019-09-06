@@ -1,5 +1,6 @@
 package com.example.springboot.shiro.controller;
 
+import com.example.springboot.shiro.annotation.Token;
 import com.example.springboot.shiro.entity.Role;
 import com.example.springboot.shiro.service.RoleService;
 import com.example.springboot.shiro.vo.BaseResponse;
@@ -16,12 +17,13 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public BaseResponse<List<Role>> list() {
         return new BaseResponse<>(roleService.list());
     }
 
     @PostMapping("/update")
+    @Token("update")
     public BaseResponse update(@RequestBody UpdateRoleReqVO vo) {
         return roleService.update(vo);
     }
@@ -32,12 +34,13 @@ public class RoleController {
     }
 
     @PostMapping("/add")
+    @Token("add")
     public BaseResponse addRole(@RequestBody AddOrUpdateRoleReqVO vo) {
-        roleService.addRole(vo);
-        return new BaseResponse();
+        return roleService.addRole(vo);
     }
 
     @PostMapping("/updateStatus")
+    @Token("update")
     public BaseResponse updateStatus(@RequestBody UpdateStatusReqVO vo) {
         return roleService.updateStatus(vo);
     }

@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> list() {
-        return roleMapper.findAllRoles(null, null);
+        return roleMapper.findAllRoles((short) 1, null);
     }
 
     @Override
@@ -120,9 +121,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void addRole(AddOrUpdateRoleReqVO vo) {
+    public BaseResponse addRole(AddOrUpdateRoleReqVO vo) {
+        Weekend<Role> weekend = Weekend.of(Role.class);
+        weekend.weekendCriteria().andEqualTo(Role::getRoleName, vo.getRoleName());
+        Role dbRole = roleMapper.selectOneByExample(weekend);
+
+        if (dbRole != null) {
+            return new BaseResponse<>(105, "角色已存在");
+        }
+
         Role role = new Role();
-        role.setRoleName(vo.getRoleName());
+        BeanUtils.copyProperties(vo, role);
         role.setStatus((short) 1);
         roleMapper.insertSelective(role);
 
@@ -153,6 +162,8 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         authorityMapper.updatePermissions(authorities);
+
+        return new BaseResponse();
     }
 
     @Override

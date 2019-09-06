@@ -17,4 +17,6 @@ public interface UserMapper extends Mapper<User>, MySqlMapper<User> {
     List<User> findUsersByRoleId(Long roleId);
 
     List<User> findUsersByCondition(@Param("keywordType") Short keywordType, @Param("keyword") String keyword, @Param("status") Short status);
+
+    void updateStatusById(@Param("id") Long id, @Param("status") Short status);
 }

@@ -1,5 +1,7 @@
 package com.example.springboot.shiro.vo.req;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @description:
  * @author: HYY
@@ -7,6 +9,7 @@ package com.example.springboot.shiro.vo.req;
  * @since
  */
 public class IdReqVO {
+    @NotNull(message = "不可为空")
     private Long id;
 
     public Long getId() {

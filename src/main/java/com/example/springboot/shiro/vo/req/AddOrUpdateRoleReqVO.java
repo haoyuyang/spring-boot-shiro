@@ -1,5 +1,7 @@
 package com.example.springboot.shiro.vo.req;
 
+import com.example.springboot.shiro.vo.BaseRequest;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * @date: 2019/9/4
  * @since
  */
-public class AddOrUpdateRoleReqVO {
+public class AddOrUpdateRoleReqVO extends BaseRequest {
     private String roleName;
     private List<Long> authorityIds;
 

@@ -17,7 +17,7 @@ public interface RoleService {
 
     PageResponse<List<Role>> getRolesByPage(QueryRolesReqVO vo);
 
-    void addRole(AddOrUpdateRoleReqVO vo);
+    BaseResponse addRole(AddOrUpdateRoleReqVO vo);
 
     BaseResponse updateStatus(UpdateStatusReqVO vo);
 
